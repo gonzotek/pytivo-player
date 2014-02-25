@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>pyTivo Player</title>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="pyTiVo Web Player">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
+	<!-- link rel="stylesheet" type="text/css" href="html5music.css" -->
+	<!--script src="html5music.js"></script-->
+</head>
+<body id="body">
+	<div id="topBar">
+		<h1 id="headerNP">pyTivo Player</h1><span id="elapsedheader"></span> <div id="transport">&nbsp;</div> <span id="durationheader"></span><br>
+		<span id="headerAlbum"></span> <span id="dash"> </span> <span id="headerArtist"></span><br>
+		<div id="loc"></div>
+	</div>
+	<div id="right">
+		<div id="info"></div>
+		<div id="np"></div>
+	</div>
+	<div id="listcontainer">
+	<ul id="mainlist" class="activelist"></ul>
+	</div>
+	<audio id="audioplayer" src="" type="audio/mpeg" preload="auto" ></audio>
+</body>
+<script>
+	var script=document.createElement('script');
+	  script.type='text/javascript';
+	  script.src="player.js?ts=" + new Date().getTime();
+	  document.getElementById("body").appendChild(script);
+
+	var styleSheet=document.createElement("link")
+	  styleSheet.setAttribute("rel", "stylesheet")
+	  styleSheet.setAttribute("type", "text/css")
+	  styleSheet.setAttribute("href", "player.css?ts=" + new Date().getTime())
+	  document.getElementsByTagName("head")[0].appendChild(styleSheet);
+</script>
+</html>
