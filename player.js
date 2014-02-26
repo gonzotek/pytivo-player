@@ -204,7 +204,7 @@ function leftArrowPressed() {
         xhr.open('GET',newLoc);
         //xhr.responseType = 'document';
         xhr.addEventListener('load', function(e) {
-            buildList(e);
+            buildList(e, newLoc);
         } );
     xhr.send();
     
@@ -232,7 +232,7 @@ function rightArrowPressed() {
                 //xhr.responseType = 'document';
                 xhr.addEventListener('load', function(e) {
                     //pyWebUI.currentLoc = link;
-                    buildList(e);
+                    buildList(e, "player.htm?Command=QueryContainer&Container="+container);
                 } );
                 xhr.send();
             } else{ 
@@ -306,7 +306,7 @@ function downArrowPressed() {
    
 }
 
-function buildList(e) {
+function buildList(e, link) {
     var mL = document.getElementById("mainlist");
     mL.innerHTML="";
     //var contentType = e.target.responseXML.getElementsByTagName("ContentType")[0].childNodes[0].nodeValue;
@@ -400,7 +400,24 @@ function buildList(e) {
             } else {
             	document.getElementById("info").innerHTML="";
             }
+            var history = link.split("?");
+            console.log(history);
+            if(history.length>1){
+           	 history = "?"+history[1];
+           	 if(history.split("/").length>1){
+           	 history = history.split("/");
+           	 //history.pop();
+           	 history = history.join("/");
+           	 }
+           	 updateHistory({},"","player.htm" + history);
+            }
 }
+
+function updateHistory(state,title,url){
+	history.pushState(state, title, url);
+}
+
+
 document.onkeydown = function(evt) {
     evt = evt || window.event;
     window.clearTimeout(pyWebUI.ssTimer);
@@ -446,43 +463,43 @@ document.onkeydown = function(evt) {
         Enter/Select: 13
         
         */
-            case 13:
+            case 13: //Enter/Select
                 rightArrowPressed();
                 evt.preventDefault();
                 break;
-            case 37:
+            case 37: //Left
                 leftArrowPressed();
                 evt.preventDefault();
                 break;
-            case 38:
+            case 38: //Up
                 upArrowPressed();
                 evt.preventDefault();
                 break;
-            case 39:
+            case 39: //Right
                 rightArrowPressed();
                 evt.preventDefault();
                 break;
-            case 40:
+            case 40: //Down
                 downArrowPressed();
                 evt.preventDefault();
                 break;
-            case 424: //down
+            case 424: //ch down
             for(var i=0;i<10;i++){downArrowPressed();}
                 evt.preventDefault();
             	break;
-            case 425: //up 
+            case 425: //ch up 
                 for(var i=0;i<10;i++){upArrowPressed();}
                 evt.preventDefault();
             	break;
-            case 437:
+            case 437: //thumb down
                 playPrev();
                 evt.preventDefault();
                 break;
-            case 429:
+            case 429: //thumb up
                 playNext();
                 evt.preventDefault();
                 break;
-            case 463:
+            case 463: //pause
                 if(pyWebUI.player.paused){
                     pyWebUI.player.play();
                 } else {
@@ -496,7 +513,23 @@ document.onkeydown = function(evt) {
         }
     }
 };
-
+window.onpopstate = function(e){
+	console.log(location.href);
+	var history = location.href.split("?Command=");
+	if(history.length>1){
+	    var xhr = new XMLHttpRequest();
+    	var link = history[1];
+    	console.log({link:"TiVoConnect?Command=" + link})
+    	xhr.open('GET', "TiVoConnect?Command=" + link);
+   		xhr.addEventListener('load', function(e) {
+        buildList(e, link);
+    } );
+    xhr.send();
+	
+	}
+	
+	//e.PreventDefault();
+}
 window.onload = function(evt) {
 	console.log(document.getElementById("topBar").clientHeight);
     document.getElementById("mainlist").style.height =  window.innerHeight - document.getElementById("topBar").clientHeight - 45 + "px";
@@ -507,10 +540,11 @@ window.onload = function(evt) {
     pyWebUI.queue = [];
     pyWebUI.history = [];
     var xhr = new XMLHttpRequest();
-    xhr.open('GET',pyWebUI.currentLoc);
+    var link = pyWebUI.currentLoc
+    xhr.open('GET',link);
     xhr.addEventListener('load', function(e) {
         pyWebUI.currentLoc = "";
-        buildList(e);
+        buildList(e, link);
     } );
     xhr.send();
     pyWebUI.ssCanvas = document.createElement("canvas");
