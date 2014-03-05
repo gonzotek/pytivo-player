@@ -257,7 +257,7 @@ function upArrowPressed() {
         if ($items[i].className == "focused" && i>0){
          $items[i].className = "";
          $items[i-1].className = "focused";
-         $scrollPos = ($items[i-1].scrollHeight * i) - $items[i-1].scrollHeight
+         $scrollPos = $items[i-1].scrollHeight * i - $items[i-1].scrollHeight;
          $ml.scrollTop= $scrollPos;
          var dataType = $items[i-1].getElementsByTagName("a")[0].getAttribute("data-type");
          if(dataType=="audio/mpeg"){
@@ -286,7 +286,7 @@ function downArrowPressed() {
         if ($items[i].className == "focused" && i<$items.length-1){
          $items[i].className = "";
          $items[i+1].className = "focused";
-         $scrollPos = $items[i+1].scrollHeight * i;
+         $scrollPos = ($items[i+1].scrollHeight * i);
          $ml.scrollTop= $scrollPos;
          var dataType = $items[i+1].getElementsByTagName("a")[0].getAttribute("data-type");
          if(dataType=="audio/mpeg"){
@@ -511,10 +511,12 @@ document.onkeydown = function(evt) {
             	modeChange();
             	evt.preventDefault();
             	break;
+            case 34:  //page down
             case 424: //ch down
             for(var i=0;i<10;i++){downArrowPressed();}
                 evt.preventDefault();
             	break;
+            case 33: //page up
             case 425: //ch up 
                 for(var i=0;i<10;i++){upArrowPressed();}
                 evt.preventDefault();
