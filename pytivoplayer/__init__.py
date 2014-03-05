@@ -20,9 +20,7 @@ import re
 body_id = ''
 rpc_id = 0
 session_id = random.randrange(0x26c000, 0x27dc20)
-YELLOW = 0xfafa0c
-WHITE = 0xffffff
-TITLE = 'PyTivo_Player'
+TITLE = 'PytivoPlayer'
 
 class Pytivoplayer(hme.Application):
     """def get_address(self):
