@@ -507,7 +507,7 @@ document.onkeydown = function(evt) {
                 downArrowPressed();
                 evt.preventDefault();
                 break;
-            case 73:
+            case 73: //i key
             	modeChange();
             	evt.preventDefault();
             	break;
@@ -527,10 +527,11 @@ document.onkeydown = function(evt) {
                 playNext();
                 evt.preventDefault();
                 break;
-            case 457:
+            case 457: //info
 				modeChange();
             	evt.preventDefault();
             	break;
+            case 32: //space bar
             case 463: //pause
                 if(pyWebUI.player.paused){
                     pyWebUI.player.play();

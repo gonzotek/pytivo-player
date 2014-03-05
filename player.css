@@ -2,12 +2,13 @@ html{margin:0;padding:0;border:0;}
 body{
 margin:0;padding:0;border:0;
 background: #03273f; /* Old browsers */
-background: -moz-linear-gradient(left,  #03273f 0%, #03273f 66%, gray 67%, #03273f 68%, #03273f 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,#03273f), color-stop(66%,#03273f), color-stop(67%,gray), color-stop(68%,#03273f), color-stop(100%,#03273f)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* IE10+ */
-background: linear-gradient(to right,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* W3C */
+/*background: -moz-linear-gradient(left,  #03273f 0%, #03273f 66%, gray 67%, #03273f 68%, #03273f 100%); /* FF3.6+ */
+/*background: -webkit-gradient(linear, left top, right top, color-stop(0%,#03273f), color-stop(66%,#03273f), color-stop(67%,gray), color-stop(68%,#03273f), color-stop(100%,#03273f)); /* Chrome,Safari4+ */
+/*background: -webkit-linear-gradient(left,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* Chrome10+,Safari5.1+ */
+/*background: -o-linear-gradient(left,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* Opera 11.10+ */
+/*background: -ms-linear-gradient(left,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* IE10+ */
+/*background: linear-gradient(to right,  #03273f 0%,#03273f 66%,gray 67%,#03273f 68%,#03273f 100%); /* W3C */
+
 }
 
 a{ text-decoration:none; color:white; border:0; outline: 2px solid rgba(0,0,0,0.0);}
@@ -21,7 +22,8 @@ ul{
 
 }
 #listcontainer{
-	width:72%;overflow:hidden;
+	border-top-left-radius: 0px; border-top-right-radius: 20px; border-right: 1px solid rgb(119, 119, 119); border-top: 1px solid rgb(119, 119, 119);
+	width:66%;overflow:hidden;
 }
 
 ul#mainlist{
@@ -180,7 +182,10 @@ border:0;
   /* smaller screens */
   #topBar h1{font-size:24pt;}
 }
-
+#artAlb{
+	width:64%;
+	display:inline-block;
+}
 #transport{
 display:inline-block;
 width:25%;
@@ -193,7 +198,14 @@ border:1px solid gray;
 border-radius:10px;
 visibility:hidden;
 }
+#transport-buttons{
+display:inline-block;
+width:25%;
+color:gray;
+text-align:center;
+}
 
+#transport-buttons i{width:15%;display:inline-block;}
 
 #topBar span{
 font-size:20pt;
