@@ -286,7 +286,7 @@ function downArrowPressed() {
         if ($items[i].className == "focused" && i<$items.length-1){
          $items[i].className = "";
          $items[i+1].className = "focused";
-         $scrollPos = $items[i+1].scrollHeight * i
+         $scrollPos = $items[i+1].scrollHeight * i;
          $ml.scrollTop= $scrollPos;
          var dataType = $items[i+1].getElementsByTagName("a")[0].getAttribute("data-type");
          if(dataType=="audio/mpeg"){
@@ -417,6 +417,30 @@ function updateHistory(state,title,url){
 	history.pushState(state, title, url);
 }
 
+function showSettings(){
+//show settings
+console.log("showing settings window");
+}
+
+function modeChange(){
+            	switch(pyWebUI.mode)
+            	{
+            	case "nav":
+            		console.log("switching to settings");
+            		pyWebUI.mode = "settings";
+            		showSettings();
+            		break;
+            	case "settings":
+            		console.log("switching to nav");
+            		pyWebUI.mode = "nav";
+            		
+            		break;
+            	}
+            	
+}
+
+
+
 
 document.onkeydown = function(evt) {
     evt = evt || window.event;
@@ -424,7 +448,7 @@ document.onkeydown = function(evt) {
     pyWebUI.ssTimer = window.setTimeout(function() {buildScreenSaver();}, 30000);
     if(pyWebUI.ssShowing==true){
         pyWebUI.ssCanvas.style.opacity="0";
-        pyWebUI.ssCanvas.style.display="none";
+        //pyWebUI.ssCanvas.style.display="none";
         window.clearInterval(pyWebUI.animateSS);
         pyWebUI.ssShowing = false;
     }else{
@@ -483,6 +507,10 @@ document.onkeydown = function(evt) {
                 downArrowPressed();
                 evt.preventDefault();
                 break;
+            case 73:
+            	modeChange();
+            	evt.preventDefault();
+            	break;
             case 424: //ch down
             for(var i=0;i<10;i++){downArrowPressed();}
                 evt.preventDefault();
@@ -499,6 +527,10 @@ document.onkeydown = function(evt) {
                 playNext();
                 evt.preventDefault();
                 break;
+            case 457:
+				modeChange();
+            	evt.preventDefault();
+            	break;
             case 463: //pause
                 if(pyWebUI.player.paused){
                     pyWebUI.player.play();
@@ -522,6 +554,7 @@ window.onpopstate = function(e){
     	console.log({link:"TiVoConnect?Command=" + link})
     	xhr.open('GET', "TiVoConnect?Command=" + link);
    		xhr.addEventListener('load', function(e) {
+   		//document.getElementById("loc").innerHTML = link;
         buildList(e, link);
     } );
     xhr.send();
@@ -530,10 +563,23 @@ window.onpopstate = function(e){
 	
 	//e.PreventDefault();
 }
+
+window.onresize = function(){
+    pyWebUI.ssCanvas.height=window.innerHeight;
+    pyWebUI.ssCanvas.width=window.innerWidth;
+    document.getElementById("mainlist").style.height =  window.innerHeight - document.getElementById("topBar").clientHeight - 30 + "px";
+}
 window.onload = function(evt) {
-	console.log(document.getElementById("topBar").clientHeight);
-    document.getElementById("mainlist").style.height =  window.innerHeight - document.getElementById("topBar").clientHeight - 45 + "px";
+	//console.log(document.getElementById("topBar").clientHeight);
+    document.getElementById("mainlist").style.height =  window.innerHeight - document.getElementById("topBar").clientHeight - 30 + "px";
     pyWebUI.currentLoc = 'TiVoConnect?Command=QueryContainer';
+    if(location.search!==""){
+    	pyWebUI.currentLoc = "TiVoConnect"+location.search;
+    	container = location.search.split("Container=")[1];
+    	//console.log("container: "+container);
+    	if (container!==undefined)document.getElementById("loc").innerHTML = decodeURIComponent(container);
+    	}
+    //console.log(pyWebUI.currentLoc);
     pyWebUI.player = document.getElementById("audioplayer");
     pyWebUI.player.addEventListener('ended', playNext);
     pyWebUI.player.ontimeupdate = function() {updateElapsedTimer();};
@@ -543,6 +589,7 @@ window.onload = function(evt) {
     var link = pyWebUI.currentLoc
     xhr.open('GET',link);
     xhr.addEventListener('load', function(e) {
+    	pyWebUI.mode = "nav";
         pyWebUI.currentLoc = "";
         buildList(e, link);
     } );
@@ -563,6 +610,16 @@ window.onload = function(evt) {
             pyWebUI.ssCanvas.style.visibility="block";
         }
     });
+    pyWebUI.ssCanvas.onclick=function(){
+		window.clearTimeout(pyWebUI.ssTimer);
+		pyWebUI.ssTimer = window.setTimeout(function() {buildScreenSaver();}, 30000);
+		if(pyWebUI.ssShowing==true){
+        	pyWebUI.ssCanvas.style.opacity="0";
+        	//pyWebUI.ssCanvas.style.display="none";
+        	window.clearInterval(pyWebUI.animateSS);
+        	pyWebUI.ssShowing = false;
+   		}
+    };
     document.getElementById("body").appendChild(pyWebUI.ssCanvas);
     pyWebUI.ssShowing = false;
     pyWebUI.ssTimer = window.setTimeout(function() {buildScreenSaver();}, 90000);
