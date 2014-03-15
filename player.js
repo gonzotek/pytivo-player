@@ -1,3 +1,36 @@
+    
+    
+    function googleImageSearchComplete(searcher) {
+      // Check that we got results
+      if (searcher.results && searcher.results.length > 0) {
+        // Grab our content div, clear it.
+        var contentDiv = document.getElementById('np');
+        contentDiv.innerHTML = '';
+    
+        // Loop through our results, printing them to the page.
+        var results = searcher.results;
+        for (var i = 0; i < 1; i++) {
+          // For each result write it's title and image to the screen
+          var result = results[i];
+          var imgContainer = document.createElement('div');
+    
+          //var title = document.createElement('h2');
+          // We use titleNoFormatting so that no HTML tags are left in the title
+          //title.innerHTML = result.titleNoFormatting;
+    
+          var newImg = document.createElement('img');
+          // There is also a result.url property which has the escaped version
+          newImg.src = result.url;
+    
+          //imgContainer.appendChild(title);
+          imgContainer.appendChild(newImg);
+    
+          // Put our title + image in the content
+          contentDiv.appendChild(imgContainer);
+        }
+      }
+    }
+
 var pyWebUI = {};
 
 function animateScreenSaver() {
@@ -109,7 +142,6 @@ function playNext() {
     if(pyWebUI.queue.length>0){
             var item = pyWebUI.queue.shift();
             pyWebUI.player.src=item["link"];
-
             document.getElementById("headerNP").innerHTML = decodeURIComponent(item["title"]);
             document.getElementById("headerAlbum").innerHTML = decodeURIComponent(item["album"]);
             document.getElementById("dash").innerHTML = "-";            
@@ -118,6 +150,29 @@ function playNext() {
             document.getElementById("durationheader").setAttribute("data-duration",item["duration"] );
             document.getElementById("elapsedheader").innerHTML = "0:00";
             document.getElementById("transport").style.visibility="visible";
+            
+            //Google Image Search
+            
+            // Our ImageSearch instance.
+     		var imageSearch = new google.search.ImageSearch();
+    
+      		// Restrict to extra large images only
+      		imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
+                                 google.search.ImageSearch.IMAGESIZE_LARGE);
+      		imageSearch.setResultSetSize(1);
+      
+			// Here we set a callback so that anytime a search is executed, it will call
+			// the searchComplete function and pass it our ImageSearch searcher.
+			// When a search completes, our ImageSearch object is automatically
+			// populated with the results.
+			imageSearch.setSearchCompleteCallback(this, googleImageSearchComplete, [imageSearch]);
+
+			// Find me a beautiful car.
+			imageSearch.execute(decodeURIComponent(item["album"]) + decodeURIComponent(item["artist"]));
+            
+            //End Google Image Search
+            
+            //pyWebUI.player.pause();
             pyWebUI.player.play();
             pyWebUI.history.push(item);
         } else {
@@ -182,11 +237,11 @@ function leftArrowPressed() {
 //          if(i!==parts.length-2) newContainer+="/";
 //          } 
 //      }
-	console.log(parts);
+	//console.log(parts);
         parts.pop();
-        console.log(parts);
+        //console.log(parts);
         parts.pop();
-        console.log(parts);
+        //console.log(parts);
         newContainer = parts.join("/");
         //console.log("newcontainer: "+ newContainer);
         newLoc+="&Container="+newContainer;
@@ -196,11 +251,12 @@ function leftArrowPressed() {
         if(newLoc.split("Container=").length>1){
         	var container = newLoc.split("Container=")[1];
         	document.getElementById("loc").innerHTML = decodeURIComponent(container);
-        }else{
-        	document.getElementById("loc").innerHTML = "";
+        }
+        if (newLoc.split("Container=")[1]==""){
+        	document.getElementById("loc").innerHTML = "&nbsp;"
         }
         var xhr = new XMLHttpRequest();
-        console.log(newLoc);
+        //	console.log("NEWLOC: " + 	(newLoc.split("Container=")[1]==""));
         xhr.open('GET',newLoc);
         //xhr.responseType = 'document';
         xhr.addEventListener('load', function(e) {
@@ -401,7 +457,7 @@ function buildList(e, link) {
             	document.getElementById("info").innerHTML="";
             }
             var history = link.split("?");
-            console.log(history);
+            //console.log(history);
             if(history.length>1){
            	 history = "?"+history[1];
            	 if(history.split("/").length>1){
@@ -580,7 +636,11 @@ window.onload = function(evt) {
     	pyWebUI.currentLoc = "TiVoConnect"+location.search;
     	container = location.search.split("Container=")[1];
     	//console.log("container: "+container);
-    	if (container!==undefined)document.getElementById("loc").innerHTML = decodeURIComponent(container);
+    	if (container!==undefined && container != ""){
+    		document.getElementById("loc").innerHTML = decodeURIComponent(container);
+    		} else {
+    			document.getElementById("loc").innerHTML = "&nbsp;"
+    		}
     	}
     //console.log(pyWebUI.currentLoc);
     pyWebUI.player = document.getElementById("audioplayer");

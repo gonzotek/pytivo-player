@@ -13,8 +13,9 @@
 </head>
 <body id="body">
 	<div id="topBar">
+	<div id="loc">&nbsp;</div>
 		<h1 id="headerNP">pyTivo Player</h1><span id="elapsedheader"></span> <div id="transport">&nbsp;</div> <span id="durationheader"></span><br>
-		<div id="artAlb"><span id="headerAlbum"></span> <span id="dash"> </span> <span id="headerArtist"></span></div>
+		<div id="artAlb"><span id="headerAlbum"> </span> <span id="dash">&nbsp;</span> <span id="headerArtist"> </span></div>
 		<div id="transport-buttons">
 			<i class="fa fa-step-backward"> </i>
 			<i class="fa fa-backward"> </i>
@@ -24,7 +25,7 @@
 			<i class="fa fa-step-forward"> </i>
 		</div>
 		
-		<div id="loc"></div>
+		
 	</div>
 	<div id="right">
 		<div id="info"></div>
@@ -33,9 +34,11 @@
 	<div id="listcontainer">
 	<ul id="mainlist" class="activelist"></ul>
 	</div>
-	<audio id="audioplayer" src="" type="audio/mpeg" preload="auto" ></audio>
+	<audio id="audioplayer" type="audio/mpeg" prebuffer="auto"></audio>
 </body>
+<script src="//www.google.com/jsapi" type="text/javascript"></script>
 <script>
+	google.load('search', '1');
 	var script=document.createElement('script');
 	  script.type='text/javascript';
 	  script.src="player.js?ts=" + new Date().getTime();
